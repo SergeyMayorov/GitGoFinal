@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: web-container
+    build: .
+    networks:
+      net_home:
+    ports:
+      - "50001:80"
+    env_file:
+      - .env_for_docker
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: pg-container
+    image: postgres
+    networks:
+      net_home:
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./first_init_db:/docker-entrypoint-initdb.d      
+    ports:
+      - "50000:5432"
+
+networks:
+  net_home:
